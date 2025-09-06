@@ -1,0 +1,33 @@
+import express from "express";
+import mongoose from "mongoose";
+// import { PORT, MONGO_URL } from "./config.js";
+import booksRoute from "./routes/booksRoute.js";
+import cors from 'cors';
+
+const MONGO_URL = "mongodb+srv://akshatarora241:akshat1234@cluster0.0lkxs.mongodb.net/";
+const PORT = 5555
+const app = express();
+
+// Middleware for parsing request body
+app.use(express.json())
+
+// Middleware for handling CORS Policy
+app.use(cors());
+
+app.get('/', (request, response) => {
+    console.log(request);
+    return response.status(234).send('Welcome to MERN project')
+});
+
+app.use('/books', booksRoute)
+
+mongoose.connect(MONGO_URL)
+.then(() => {
+    console.log('App connected Database');
+    app.listen(PORT, () => {
+        console.log(`App is listening to port: ${PORT}`);
+    })
+})
+.catch((error) => {
+    console.log("Error in connecting to db:",error);
+});
